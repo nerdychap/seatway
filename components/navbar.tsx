@@ -5,8 +5,8 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
+  SignOutButton,
   SignUpButton,
-  UserButton,
 } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -56,15 +56,16 @@ export function Navbar() {
             >
               Create Event
             </Link>
-            <UserButton
+            {/*<UserButton
               appearance={{
                 elements: {
                   userButtonAvatarBox: "w-9 h-9 sm:w-10 sm:h-10", // Adjusted size
                   userButtonPopoverCard: "shadow-lg rounded-md",
                 },
               }}
-            />
-            {/*<SignOutButton />*/}
+            />*/}
+            <Link href="/user-profile">Profile</Link>
+            <SignOutButton />
             {/*</div>*/}
           </SignedIn>
 
