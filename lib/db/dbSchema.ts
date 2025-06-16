@@ -39,8 +39,13 @@ export const EventSchema = z.object({
   // Venue is optional and can be null.
   venue: z.string().max(255, "Venue name too long").optional().nullable(),
   // total_tickets is required and must be a positive integer.
-  total_tickets: z.number().int().positive("Total tickets must be positive"),
+  total_tickets: z
+    .number()
+    .int()
+    .positive("Total tickets must be positive")
+    .optional(),
   // tickets_sold defaults to 0 and is managed by the database/application logic.
+  event_image_url: z.string().nullable().optional(),
   tickets_sold: z
     .number()
     .int()

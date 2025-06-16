@@ -18,7 +18,16 @@ export const getEventById = async (eventId: string): Promise<Event> => {
     .eq("event_id", eventId)
     .single();
   if (error) {
-    throw new Error(error.message);
+    throw new Error(`Error getting event:${error.message}`);
+  }
+  return data;
+};
+
+export const createEvent = async (event: Event) => {
+  const { error, data } = await supabase.from("events").insert(event).single();
+
+  if (error) {
+    throw new Error(`Error creating event:${error.message}`);
   }
   return data;
 };

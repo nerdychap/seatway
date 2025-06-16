@@ -3,7 +3,6 @@ import { getEvents } from "../lib/db/services/events";
 
 export default async function EventPage() {
   const data = await getEvents();
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-8 text-center text-4xl font-bold text-gray-800">
@@ -16,6 +15,13 @@ export default async function EventPage() {
             className="transform rounded-lg border bg-white p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <Link href={`/events/${event.event_id}`}>
+              <div className="w-full h-48 overflow-hidden rounded-md mb-4"> {/* Image container */}
+                <img
+                  src={event.event_image_url ?? '/images/placeholder-event.jpg'} // Updated placeholder path
+                  alt={event.event_name || 'Event image'} // More robust alt text
+                  className="w-full h-full object-cover" // Image styling
+                />
+              </div>
               <h2 className="mb-3 text-2xl font-semibold text-gray-900">
                 {event.event_name}
               </h2>

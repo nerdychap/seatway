@@ -1,15 +1,15 @@
 import { getEventById } from "@/lib/db/services/events";
 import { getTicketsByEventId } from "@/lib/db/services/tickets";
 import { notFound } from "next/navigation";
-import { Event, Ticket } from "@/lib/db/dbSchema"; // Assuming types are exported
+import { Event, Ticket } from "@/lib/db/dbSchema"; 
 
-// Updated prop type for Next.js page components
+
 type EventDetailsPageProps = {
-  params: Promise<{ id: string }>; // Standard Next.js page params type
+  params: Promise<{ id: string }>; 
 };
 
 const EventDetailsPage = async ({ params }: EventDetailsPageProps) => {
-  const { id } = await params; // Directly access id from params
+  const { id } = await params; 
 
   let event: Event | null = null;
   let tickets: Ticket[] = [];
@@ -21,7 +21,7 @@ const EventDetailsPage = async ({ params }: EventDetailsPageProps) => {
     }
   } catch (error) {
     console.error("Failed to fetch event details:", error);
-    // Consider redirecting to a custom error page or showing a generic error message
+    
     notFound();
   }
 
