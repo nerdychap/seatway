@@ -33,11 +33,16 @@ export const EventSchema = z.object({
     .min(1, "Event name is required")
     .max(255, "Event name too long"),
   // Description is optional and can be null.
-  description: z.string().optional().nullable(),
+  description: z.string().min(1, "Event description is required"),
   // event_date is required and must be a valid datetime string.
-  event_date: z.date("Invalid event date and time"),
+  event_date: z
+    .string("Invalid event date and time")
+    .min(1, "Date is required"),
   // Venue is optional and can be null.
-  venue: z.string().max(255, "Venue name too long").optional().nullable(),
+  venue: z
+    .string()
+    .min(1, "Event venue is required")
+    .max(255, "Venue name too long"),
   // total_tickets is required and must be a positive integer.
   total_tickets: z
     .number()
@@ -45,7 +50,7 @@ export const EventSchema = z.object({
     .positive("Total tickets must be positive")
     .optional(),
   // tickets_sold defaults to 0 and is managed by the database/application logic.
-  event_image_url: z.string().nullable().optional(),
+  event_image_url: z.string().min(1, "Event image required"),
   tickets_sold: z
     .number()
     .int()

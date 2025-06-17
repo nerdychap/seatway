@@ -1,29 +1,22 @@
-import { Submit } from "@/components/ui/submit";
-import { createEvent } from "@/lib/db/services/events";
-import { uploadFile } from "@/lib/db/services/file-upload";
-import { redirect } from "next/navigation";
-import React from "react";
+"use client";
+import { ActionState, createEventAction } from "@/lib/actions/events";
+import { useActionState } from "react";
 
-export default async function CreateEventPage() {
-  const handleCreateEvent = async (formData: FormData) => {
-    "use server";
-
-    const eventName = formData.get("event_name") as string;
-    const description = formData.get("description") as string;
-    const eventDate = formData.get("event_date") as string;
-    const venue = formData.get("venue") as string;
-    const eventImageFile = formData.get("event_image_file") as File;
-    const imageUrl = await uploadFile(eventImageFile);
-
-    await createEvent({
-      event_date: new Date(eventDate),
-      event_image_url: imageUrl,
-      event_name: eventName,
-      description,
-      venue,
-    });
-    redirect("/");
+export default function CreateEventPage() {
+  const initialState: ActionState = {
+    errors: {},
+    state: {
+      description: "",
+      event_date: "",
+      venue: "",
+      event_image_url: "",
+      event_name: "",
+    },
   };
+  const [state, action, pending] = useActionState(
+    createEventAction,
+    initialState
+  );
 
   const createTickets = (formData: FormData) => {
     const ticketTypes = [];
@@ -56,7 +49,7 @@ export default async function CreateEventPage() {
             Create New Event
           </h1>
 
-          <form action={handleCreateEvent} className="space-y-6">
+          <form action={action} className="space-y-6">
             <div>
               <label
                 htmlFor="event_name"
@@ -68,14 +61,15 @@ export default async function CreateEventPage() {
                 type="text"
                 name="event_name"
                 id="event_name"
-                required
-                defaultValue=""
+                defaultValue={state.state?.event_name}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
-              {/* Error display logic removed */}
+
+              <p className="mt-1 text-sm text-red-600">
+                {state.errors?.event_name && state.errors.event_name}
+              </p>
             </div>
 
-            {/* Description */}
             <div>
               <label
                 htmlFor="description"
@@ -87,14 +81,15 @@ export default async function CreateEventPage() {
                 name="description"
                 id="description"
                 rows={4}
-                defaultValue=""
-                required
+                defaultValue={state.state?.description}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
-              {/* Error display logic removed */}
+
+              <p className="mt-1 text-sm text-red-600">
+                {state.errors?.description && state.errors.description}
+              </p>
             </div>
 
-            {/* Event Date & Time */}
             <div>
               <label
                 htmlFor="event_date"
@@ -106,14 +101,15 @@ export default async function CreateEventPage() {
                 type="datetime-local"
                 name="event_date"
                 id="event_date"
-                required
-                defaultValue=""
+                defaultValue={state.state?.event_date}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
-              {/* Error display logic removed */}
+
+              <p className="mt-1 text-sm text-red-600">
+                {state.errors?.event_date && state.errors.event_date}
+              </p>
             </div>
 
-            {/* Venue */}
             <div>
               <label
                 htmlFor="venue"
@@ -125,14 +121,15 @@ export default async function CreateEventPage() {
                 type="text"
                 name="venue"
                 id="venue"
-                required
-                defaultValue=""
+                defaultValue={state.state?.venue}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
-              {/* Error display logic removed */}
+
+              <p className="mt-1 text-sm text-red-600">
+                {state.errors?.venue && state.errors.venue}
+              </p>
             </div>
 
-            {/* Event Image File */}
             <div>
               <label
                 htmlFor="event_image_file"
@@ -151,23 +148,21 @@ export default async function CreateEventPage() {
                            file:text-sm file:font-semibold
                            file:bg-indigo-50 file:text-indigo-700
                            hover:file:bg-indigo-100"
-                required
               />
-              {/* Error display logic removed */}
-              {/* Selected file name display logic removed */}
+
+              <p className="mt-1 text-sm text-red-600">
+                {state.errors?.event_image_url && state.errors.event_image_url}
+              </p>
             </div>
 
-            {/* Static Ticket Types Section */}
             <div className="space-y-6 pt-6 border-t border-gray-200">
               <h2 className="text-xl font-semibold text-gray-800">
                 Ticket Types
               </h2>
-              {/* Hidden input for ticket count - static for this example */}
+
               <input type="hidden" name="ticket_types_count" value="1" />
 
-              {/* Example of one static ticket type */}
               <div className="p-4 border border-gray-200 rounded-md space-y-4 relative">
-                {/* Remove button (static, non-functional) */}
                 <button
                   type="button"
                   className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100 transition-colors"
@@ -199,10 +194,9 @@ export default async function CreateEventPage() {
                     name="ticket_type_0"
                     id="ticket_type_0"
                     defaultValue="General Admission"
-                    //required
+                    //
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
-                  {/* Error display logic removed */}
                 </div>
                 <div>
                   <label
@@ -216,12 +210,10 @@ export default async function CreateEventPage() {
                     name="price_0"
                     id="price_0"
                     defaultValue="0"
-                    required
                     min="0"
                     step="0.01"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
-                  {/* Error display logic removed */}
                 </div>
                 <div>
                   <label
@@ -235,15 +227,12 @@ export default async function CreateEventPage() {
                     name="quantity_available_0"
                     id="quantity_available_0"
                     defaultValue="0"
-                    required
                     min="0"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   />
-                  {/* Error display logic removed */}
                 </div>
               </div>
 
-              {/* "Add Another Ticket Type" button (static, non-functional) */}
               <button
                 type="button"
                 className="w-full flex items-center justify-center px-4 py-2 border border-dashed border-gray-300 rounded-md shadow-sm text-sm font-medium text-indigo-600 hover:text-indigo-500 hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
@@ -264,11 +253,18 @@ export default async function CreateEventPage() {
               </button>
             </div>
 
-            {/* Submission message display logic removed */}
-
-            {/* Submit Button (static) */}
             <div>
-              <Submit title="Create Event" />
+              <button
+                type="submit"
+                disabled={pending}
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+                  pending
+                    ? "bg-indigo-300 cursor-not-allowed"
+                    : "bg-indigo-600 hover:bg-indigo-700"
+                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors`}
+              >
+                {pending ? "Loading..." : "Create Event"}
+              </button>
             </div>
           </form>
         </div>

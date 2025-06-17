@@ -15,10 +15,11 @@ export default async function EventPage() {
             className="transform rounded-lg border bg-white p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <Link href={`/events/${event.event_id}`}>
-              <div className="w-full h-48 overflow-hidden rounded-md mb-4"> {/* Image container */}
+              <div className="w-full h-48 overflow-hidden rounded-md mb-4">
+                {/* Image container */}
                 <img
-                  src={event.event_image_url ?? '/images/placeholder-event.jpg'} // Updated placeholder path
-                  alt={event.event_name || 'Event image'} // More robust alt text
+                  src={event.event_image_url ?? "/images/placeholder-event.jpg"} // Updated placeholder path
+                  alt={event.event_name || "Event image"} // More robust alt text
                   className="w-full h-full object-cover" // Image styling
                 />
               </div>
