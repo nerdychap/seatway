@@ -1,5 +1,5 @@
 # Seatsway
-
+ - [Seatsway](https://seatsway.netlify.app/)
 Seatsway is a modern web platform for discovering, creating, and purchasing tickets for entertainment events. Built with Next.js, TypeScript, Tailwind CSS, and Zod, it provides a seamless experience for both event organizers and attendees.
 
 ## Features
