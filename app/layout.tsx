@@ -6,6 +6,8 @@ import { Footer } from "@/components/footer";
 import { CartProvider } from "@/contexts/cart-context";
 import { ClerkProvider } from "@clerk/nextjs";
 
+export const dynamic = "force-dynamic"; // Ensures the layout is always server-rendered
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
