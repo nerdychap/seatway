@@ -1,15 +1,14 @@
 import { getEventById } from "@/lib/db/services/events";
 import { getTicketsByEventId } from "@/lib/db/services/tickets";
 import { notFound } from "next/navigation";
-import { Event, Ticket } from "@/lib/db/dbSchema"; 
-
+import { Event, Ticket } from "@/lib/db/dbSchema";
 
 type EventDetailsPageProps = {
-  params: Promise<{ id: string }>; 
+  params: Promise<{ id: string }>;
 };
 
 const EventDetailsPage = async ({ params }: EventDetailsPageProps) => {
-  const { id } = await params; 
+  const { id } = await params;
 
   let event: Event | null = null;
   let tickets: Ticket[] = [];
@@ -21,7 +20,6 @@ const EventDetailsPage = async ({ params }: EventDetailsPageProps) => {
     }
   } catch (error) {
     console.error("Failed to fetch event details:", error);
-    
     notFound();
   }
 
@@ -32,19 +30,22 @@ const EventDetailsPage = async ({ params }: EventDetailsPageProps) => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl rounded-lg bg-white p-6 shadow-xl sm:p-8">
-        {/* Event Name */}
+        <img
+          src={event.event_image_url}
+          alt={event.event_name}
+          className="mb-6 w-full rounded-lg object-contain shadow-md"
+          style={{ height: "400px" }}
+        />
         <h1 className="mb-6 text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           {event.event_name}
         </h1>
 
-        {/* Event Description */}
         {event.description && (
           <p className="mb-8 text-base text-gray-600 leading-relaxed sm:text-lg">
             {event.description}
           </p>
         )}
 
-        {/* Event Meta Information (Date & Venue) */}
         <div className="mb-8 border-t border-b border-gray-200 py-6">
           <dl className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
             <div className="sm:col-span-1">
@@ -71,7 +72,6 @@ const EventDetailsPage = async ({ params }: EventDetailsPageProps) => {
           </dl>
         </div>
 
-        {/* Tickets Section */}
         <div>
           <h2 className="mb-6 text-2xl font-semibold text-gray-800">
             Available Tickets
@@ -89,7 +89,7 @@ const EventDetailsPage = async ({ params }: EventDetailsPageProps) => {
                         {ticket.ticket_type || "General Admission"}
                       </h3>
                       <p className="text-xl font-semibold text-indigo-600 mt-1">
-                        ${ticket.price.toFixed(2)}
+                        R{ticket.price.toFixed(2)}
                       </p>
                     </div>
                     <button

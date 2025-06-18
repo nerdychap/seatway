@@ -2,19 +2,21 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod/v4";
-import { Event, EventSchema } from "../db/dbSchema";
+import { Event, EventSchema, Ticket } from "../db/dbSchema";
 import { createEvent } from "../db/services/events";
 import { uploadFile } from "../db/services/file-upload";
+import { createTickets } from "../db/services/tickets";
 
 export type ActionState = {
-  errors: Partial<Event>;
+  errors: Partial<Event> & { tickets?: string };
   state: Omit<Event, "event_id" | "tickets_sold" | "tickets_available">;
 };
 
 export const createEventAction = async (
+  tickets: Omit<Ticket, "event_id">[],
   _prevState: ActionState,
   formData: FormData
-) => {
+): Promise<ActionState> => {
   const event_name = formData.get("event_name") as string;
   const description = formData.get("description") as string;
   const event_date = formData.get("event_date") as string;
@@ -24,7 +26,6 @@ export const createEventAction = async (
   if (event_image_file.size) {
     event_image_url = await uploadFile(event_image_file);
   }
-
   const isValidated = EventSchema.safeParse({
     event_date,
     event_name,
@@ -42,6 +43,10 @@ export const createEventAction = async (
         event_image_url: flattedError.event_image_url?.[0],
         description: flattedError.description?.[0],
         venue: flattedError.venue?.[0],
+        tickets:
+          tickets.length === 0
+            ? "At least one ticket type is required."
+            : undefined,
       },
       state: {
         event_date,
@@ -52,12 +57,15 @@ export const createEventAction = async (
       },
     };
   }
-  await createEvent({
+  const result = await createEvent({
     event_date,
     event_image_url,
     event_name,
     description,
     venue,
   });
+
+  await createTickets(tickets, JSON.stringify(result.event_id));
+
   redirect("/");
 };

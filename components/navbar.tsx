@@ -1,12 +1,7 @@
 "use client";
 
 import { useCart } from "@/contexts/cart-context";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 export function Navbar() {
@@ -25,7 +20,6 @@ export function Navbar() {
             href="/checkout"
             className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
           >
-            {/* Tailwind CSS Shopping Cart SVG Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-gray-600 hover:text-gray-800 transition-colors"
@@ -48,44 +42,21 @@ export function Navbar() {
           </Link>
 
           <SignedIn>
-            {/*<div className="flex items-center">*/}
             <Link
               href="/events/create-event"
               className="px-3 py-2 sm:px-4 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-sm transition-colors"
             >
               Create Event
             </Link>
-            {/*<UserButton
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "w-9 h-9 sm:w-10 sm:h-10", // Adjusted size
-                  userButtonPopoverCard: "shadow-lg rounded-md",
-                },
-              }}
-            />*/}
-            {/*<Link href="/user-profile">Profile</Link>*/}
-            {/*<SignOutButton />*/}
-            {/*</div>*/}
             <UserButton />
           </SignedIn>
 
           <SignedOut>
-            {/*<Link
-              href="/sign-in"
-              className="px-3 py-2 sm:px-4 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-sm transition-colors"
-            >
-              Sign In
-            </Link>*/}
             <SignInButton mode="modal">
-                <button className="px-3 py-2 sm:px-4 text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-gray-100 rounded-md transition-colors">Sign In</button>
+              <button className="px-3 py-2 sm:px-4 text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-gray-100 rounded-md transition-colors">
+                Sign In
+              </button>
             </SignInButton>
-            {/*<SignUpButton />*/}
-            {/*<Link
-              href="/sign-up"
-              className="px-3 py-2 sm:px-4 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-sm transition-colors"
-            >
-              Sign Up
-            </Link>*/}
           </SignedOut>
         </div>
       </div>

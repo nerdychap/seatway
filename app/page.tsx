@@ -16,11 +16,10 @@ export default async function EventPage() {
           >
             <Link href={`/events/${event.event_id}`}>
               <div className="w-full h-48 overflow-hidden rounded-md mb-4">
-                {/* Image container */}
                 <img
-                  src={event.event_image_url ?? "/images/placeholder-event.jpg"} // Updated placeholder path
-                  alt={event.event_name || "Event image"} // More robust alt text
-                  className="w-full h-full object-cover" // Image styling
+                  src={event.event_image_url ?? "/images/placeholder-event.jpg"}
+                  alt={event.event_name || "Event image"}
+                  className="w-full h-full object-contain"
                 />
               </div>
               <h2 className="mb-3 text-2xl font-semibold text-gray-900">

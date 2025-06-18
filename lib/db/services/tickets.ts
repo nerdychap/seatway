@@ -15,3 +15,24 @@ export const getTicketsByEventId = async (
 
   return data;
 };
+
+export const createTickets = async (
+  tickets: Omit<Ticket, "ticket_id" | "event_id" | "quantity_sold">[],
+  eventId: string
+): Promise<Ticket[]> => {
+  const { data, error } = await supabase
+    .from("tickets")
+    .insert(
+      tickets.map((ticket) => ({
+        ...ticket,
+        event_id: eventId,
+      }))
+    )
+    .select();
+
+  if (error) {
+    throw new Error(error?.message);
+  }
+
+  return data;
+};
